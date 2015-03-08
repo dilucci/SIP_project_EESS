@@ -29,8 +29,8 @@ public class GUI_Main extends javax.swing.JFrame {
         initComponents();
         subjectListModel = new DefaultListModel();
         subjectListFinalModel = new DefaultListModel();
-        
         subjectsFinalTableModel = new DefaultTableModel();
+        refreshTablesHOP();
 
         initUI();
 
@@ -40,6 +40,14 @@ public class GUI_Main extends javax.swing.JFrame {
         ctr.initialize(); //initializes program with dummy objects
         subjectList = ctr.getAllSubjects();
         refreshListsHOP();
+        startSubjectFinalTable();
+    }
+    
+    private void startSubjectFinalTable() {
+        subjectsFinalTableModel.setColumnCount(0);
+        subjectsFinalTableModel.addColumn("Title");
+        subjectsFinalTableModel.addColumn("1st prio");
+        subjectsFinalTableModel.addColumn("2nd prio");
     }
     
     private void refreshListsHOP() {
@@ -54,7 +62,19 @@ public class GUI_Main extends javax.swing.JFrame {
     }
     
     private void refreshTablesHOP() {
-        
+        subjectsFinalTableModel.setRowCount(0);
+        subjectsFinalTableModel.getDataVector().removeAllElements();
+        subjectsFinalTableModel.fireTableDataChanged();
+        ArrayList <ElectiveSubject> subjectListFinal;
+        subjectListFinal = ctr.getAllSubjectsFinal();
+        for (ElectiveSubject subject : subjectListFinal) {
+            Object[] electiveSubjectArray = new Object[3];
+            electiveSubjectArray[0] = subject.getTitle();
+            electiveSubjectArray[1] = subject.getFirstPriorityCount();
+            electiveSubjectArray[2] = subject.getSecondPriorityCount();
+            subjectsFinalTableModel.addRow(electiveSubjectArray);
+        }
+        jTableSubjectsFinalHOP.setModel(subjectsFinalTableModel);
     }
 
     /**
@@ -84,7 +104,7 @@ public class GUI_Main extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList1stprio = new javax.swing.JList();
+        jListElectiveSubjectStudent = new javax.swing.JList();
         jButtonselect1stprio = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
@@ -245,12 +265,12 @@ public class GUI_Main extends javax.swing.JFrame {
 
         jLabel11.setText("Selection of elective subjects 1st Round");
 
-        jList1stprio.setModel(new javax.swing.AbstractListModel() {
+        jListElectiveSubjectStudent.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane3.setViewportView(jList1stprio);
+        jScrollPane3.setViewportView(jListElectiveSubjectStudent);
 
         jButtonselect1stprio.setText("Select 1st Prio");
         jButtonselect1stprio.addActionListener(new java.awt.event.ActionListener() {
@@ -599,7 +619,7 @@ public class GUI_Main extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false, true
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -893,13 +913,24 @@ public class GUI_Main extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonRemoveSubjectsHOPActionPerformed
 
     private void jButtonSaveSuggestedSubjectsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveSuggestedSubjectsActionPerformed
-        Object[] array = jListSuggestedSubjectsFinal.getComponents();
-        ArrayList<ElectiveSubject> finalList = new ArrayList();
-        
-        for (Object object : array) {
-            finalList.add((ElectiveSubject)object);
+        ArrayList<ElectiveSubject> suggestedSubjectList = new ArrayList();
+        for (int i = 0; i < subjectListFinalModel.size(); i++) {
+            suggestedSubjectList.add((ElectiveSubject) subjectListFinalModel.getElementAt(i));
         }
-        ctr.setSubjectListFinal(finalList);
+        ctr.setSubjectListFinal(suggestedSubjectList);
+        refreshTablesHOP();
+        jListElectiveSubjectStudent.setModel(subjectListFinalModel);
+        
+        
+        
+        
+//        ArrayList<ElectiveSubject> finalList = new ArrayList();
+//        ElectiveSubject subject;
+//        for (Object object : array) {
+//            subject = (ElectiveSubject) object;
+//            finalList.add(subject);
+//        }
+//        ctr.setSubjectListFinal(finalList);
         
         
     }//GEN-LAST:event_jButtonSaveSuggestedSubjectsActionPerformed
@@ -967,11 +998,11 @@ public class GUI_Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelStatusHOP;
-    private javax.swing.JList jList1stprio;
     private javax.swing.JList jList3;
     private javax.swing.JList jList4;
     private javax.swing.JList jList5;
     private javax.swing.JList jList6;
+    private javax.swing.JList jListElectiveSubjectStudent;
     private javax.swing.JList jListSuggestedSubjects;
     private javax.swing.JList jListSuggestedSubjectsFinal;
     private javax.swing.JPanel jPanel1;
