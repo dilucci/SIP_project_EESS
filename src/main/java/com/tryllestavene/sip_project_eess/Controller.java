@@ -17,6 +17,15 @@ public class Controller {
         poolAList = new ArrayList<>();
         poolBList = new ArrayList();
     }
+    
+    public void initialize(){
+        ElectiveSubject subject1 = new ElectiveSubject("Android", "nice", "Peter", 2, 1);
+        ElectiveSubject subject2 = new ElectiveSubject("C#", "fedt", "Torben", 1, 2);
+        ElectiveSubject subject3 = new ElectiveSubject("Arduino", "sejt", "Tobias", 0, 0);
+        insertIntoPool("s", subject1);
+        insertIntoPool("s", subject2);
+        insertIntoPool("s", subject3);
+    }
 
     public boolean insertIntoPool(String pool, ElectiveSubject subject){
         if(pool.toLowerCase().equals("a")){

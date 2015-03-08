@@ -36,10 +36,10 @@ public class ControllerTest {
     
     @Before
     public void setUp() {
-        final ElectiveSubjectInterface subjectIF = context.mock(ElectiveSubjectInterface.class);
-        subject1 = new ElectiveSubject(subjectIF, "Android", "nice", "Peter", 2, 1);
-        subject2 = new ElectiveSubject(subjectIF, "C#", "fedt", "Torben", 1, 2);
-        subject3 = new ElectiveSubject(subjectIF, "Arduino", "sejt", "Tobias", 0, 0);
+        //final ElectiveSubjectInterface subjectIF = context.mock(ElectiveSubjectInterface.class);
+        subject1 = new ElectiveSubject("Android", "nice", "Peter", 2, 1);
+        subject2 = new ElectiveSubject("C#", "fedt", "Torben", 1, 2);
+        subject3 = new ElectiveSubject("Arduino", "sejt", "Tobias", 0, 0);
         
         controller = new Controller();
         subjectList = new ArrayList();

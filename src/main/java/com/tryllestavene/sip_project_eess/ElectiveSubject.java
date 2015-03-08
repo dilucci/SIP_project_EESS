@@ -10,15 +10,15 @@ package com.tryllestavene.sip_project_eess;
  * @author Seb
  */
 public class ElectiveSubject {
-    private final ElectiveSubjectInterface subjectIF;
+    //private final ElectiveSubjectInterface subjectIF;
     private String title;
     private String description;
     private String proposedTeacher;
     private int firstPriorityCount;
     private int secondPriorityCount;
 
-    public ElectiveSubject(ElectiveSubjectInterface subjectIF, String title, String description, String proposedTeacher, int firstPriorityCount, int secondPriorityCount) {
-        this.subjectIF = subjectIF;
+    public ElectiveSubject(String title, String description, String proposedTeacher, int firstPriorityCount, int secondPriorityCount) {
+        //this.subjectIF = subjectIF;
         this.title = title;
         this.description = description;
         this.proposedTeacher = proposedTeacher;

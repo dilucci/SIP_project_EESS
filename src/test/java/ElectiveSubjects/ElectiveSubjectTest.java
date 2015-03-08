@@ -30,8 +30,8 @@ public class ElectiveSubjectTest {
     
     @Test
     public void testCreateElectiveSubject () throws Exception {
-        final ElectiveSubjectInterface subjectIF = context.mock(ElectiveSubjectInterface.class);
-        ElectiveSubject subject = new ElectiveSubject(subjectIF, "Android", "sygt det er sejt det android", "Peter", 4, 2);
+        //final ElectiveSubjectInterface subjectIF = context.mock(ElectiveSubjectInterface.class);
+        ElectiveSubject subject = new ElectiveSubject("Android", "sygt det er sejt det android", "Peter", 4, 2);
         assertThat(subject.getTitle(), is("Android"));
     }
 }
