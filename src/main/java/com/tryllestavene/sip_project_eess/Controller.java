@@ -47,20 +47,26 @@ public class Controller {
     public boolean removeFromPool(String pool, ElectiveSubject subject){
         //remove from poolA if string = a
         if(pool.toLowerCase().equals("a")){
+            if (poolAList.contains(subject)) {
             poolAList.remove(subject);
             return true;
+            }
         }
         
         //remove from poolB if string = b
         if(pool.toLowerCase().equals("b")){
+            if (poolBList.contains(subject)) {
             poolBList.remove(subject);
             return true;
+            }
         }
         
         //remove from subjectList(1st round) if string = s
         if(pool.toLowerCase().equals("s")){
+            if (subjectList.contains(subject)) {
             subjectList.remove(subject);
             return true;
+            }
         }
         
         return false;

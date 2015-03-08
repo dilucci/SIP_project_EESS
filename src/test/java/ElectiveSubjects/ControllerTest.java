@@ -80,4 +80,9 @@ public class ControllerTest {
         assertThat(controller.getPoolA().size(), is(1));
         assertThat(controller.getPoolA().contains(subject1), is(false));
     }
+    
+    @Test
+    public void removeFromPoolNonExisting() throws Exception {
+        assertThat(controller.removeFromPool("a", subject1), is(false));
+    }
 }
