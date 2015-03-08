@@ -81,6 +81,10 @@ public class Controller {
         return false;
     }
 
+    public ArrayList<ElectiveSubject> getAllSubjects() {
+        return subjectList;
+    }
+    
     public ArrayList<ElectiveSubject> getPoolA() {
         return poolAList;
     }
@@ -88,7 +92,4 @@ public class Controller {
     public ArrayList<ElectiveSubject> getPoolB() {
         return poolBList;
     }
-    
-    
-    
 }

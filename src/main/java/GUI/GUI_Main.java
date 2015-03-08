@@ -6,6 +6,9 @@
 package GUI;
 
 import com.tryllestavene.sip_project_eess.Controller;
+import com.tryllestavene.sip_project_eess.ElectiveSubject;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -14,12 +17,35 @@ import com.tryllestavene.sip_project_eess.Controller;
 public class GUI_Main extends javax.swing.JFrame {
 
     private Controller ctr;
-    
+    private ArrayList<ElectiveSubject> subjectList;
+    private DefaultListModel subjectListModel;
+    private DefaultListModel subjectListFinalModel;
+
     public GUI_Main() {
         ctr = new Controller();
-        ctr.initialize(); //initializes program with dummy objects
         initComponents();
-        
+        subjectListModel = new DefaultListModel();
+        subjectListFinalModel = new DefaultListModel();
+
+        initUI();
+
+    }
+
+    private void initUI() {
+        ctr.initialize(); //initializes program with dummy objects
+        subjectList = ctr.getAllSubjects();
+        refreshListsHOP();
+    }
+    
+    private void refreshListsHOP() {
+        subjectList = ctr.getAllSubjects();
+        subjectListModel.clear();
+        subjectListFinalModel.clear();
+        for (ElectiveSubject subject : subjectList) {
+            subjectListModel.addElement(subject);
+        }
+        jListSuggestedSubjects.setModel(subjectListModel);
+        jListSuggestedSubjectsFinal.setModel(subjectListFinalModel);
     }
 
     /**
@@ -77,18 +103,18 @@ public class GUI_Main extends javax.swing.JFrame {
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         jTextFieldTitleHOP = new javax.swing.JTextField();
-        jLabel23 = new javax.swing.JLabel();
+        jLabelStatusHOP = new javax.swing.JLabel();
         jButtonSaveNewSuggestionHOP = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextAreaHOP = new javax.swing.JTextArea();
+        jTextAreaDescriptionHOP = new javax.swing.JTextArea();
         jButtonAddSubjectsHOP = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jListSuggestedSubjects = new javax.swing.JList();
         jLabel5 = new javax.swing.JLabel();
         jButtonRemoveSubjectsHOP = new javax.swing.JButton();
-        jScrollPane11 = new javax.swing.JScrollPane();
-        jListSuggestedSubjectsFinal = new javax.swing.JList();
         jButtonSaveSuggestedSubjects = new javax.swing.JButton();
+        jScrollPane12 = new javax.swing.JScrollPane();
+        jListSuggestedSubjectsFinal = new javax.swing.JList();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane7 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -409,7 +435,7 @@ public class GUI_Main extends javax.swing.JFrame {
             }
         });
 
-        jLabel23.setText("Label for confirmation");
+        jLabelStatusHOP.setText("Label for confirmation");
 
         jButtonSaveNewSuggestionHOP.setText("Save Suggestion");
         jButtonSaveNewSuggestionHOP.addActionListener(new java.awt.event.ActionListener() {
@@ -418,11 +444,16 @@ public class GUI_Main extends javax.swing.JFrame {
             }
         });
 
-        jTextAreaHOP.setColumns(20);
-        jTextAreaHOP.setRows(5);
-        jScrollPane4.setViewportView(jTextAreaHOP);
+        jTextAreaDescriptionHOP.setColumns(20);
+        jTextAreaDescriptionHOP.setRows(5);
+        jScrollPane4.setViewportView(jTextAreaDescriptionHOP);
 
         jButtonAddSubjectsHOP.setText(">>");
+        jButtonAddSubjectsHOP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddSubjectsHOPActionPerformed(evt);
+            }
+        });
 
         jListSuggestedSubjects.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -434,15 +465,20 @@ public class GUI_Main extends javax.swing.JFrame {
         jLabel5.setText("List of suggested subjects");
 
         jButtonRemoveSubjectsHOP.setText("<<");
+        jButtonRemoveSubjectsHOP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRemoveSubjectsHOPActionPerformed(evt);
+            }
+        });
+
+        jButtonSaveSuggestedSubjects.setText("save");
 
         jListSuggestedSubjectsFinal.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane11.setViewportView(jListSuggestedSubjectsFinal);
-
-        jButtonSaveSuggestedSubjects.setText("save");
+        jScrollPane12.setViewportView(jListSuggestedSubjectsFinal);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -451,6 +487,10 @@ public class GUI_Main extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(jLabelStatusHOP)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonSaveSuggestedSubjects))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel21)
@@ -465,26 +505,17 @@ public class GUI_Main extends javax.swing.JFrame {
                                     .addComponent(jLabel12)
                                     .addGap(89, 89, 89)
                                     .addComponent(jTextFieldTeacherHOP, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel13))
-                        .addContainerGap(43, Short.MAX_VALUE))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13)
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jButtonAddSubjectsHOP)
                                     .addComponent(jButtonRemoveSubjectsHOP))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jScrollPane11))
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(10, 10, 10))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jLabel23)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonSaveSuggestedSubjects))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel5))
+                        .addContainerGap(15, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButtonSaveNewSuggestionHOP)
@@ -494,42 +525,42 @@ public class GUI_Main extends javax.swing.JFrame {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel21)
+                    .addComponent(jTextFieldTitleHOP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel22)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldTeacherHOP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonSaveNewSuggestionHOP)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(jLabel5)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel21)
-                            .addComponent(jTextFieldTitleHOP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(16, 16, 16)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel22)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(35, 35, 35)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextFieldTeacherHOP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonSaveNewSuggestionHOP)
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addComponent(jButtonAddSubjectsHOP)
+                                .addGap(27, 27, 27)
+                                .addComponent(jButtonRemoveSubjectsHOP)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel8Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel8Layout.createSequentialGroup()
-                                        .addGap(16, 16, 16)
-                                        .addComponent(jButtonAddSubjectsHOP)
-                                        .addGap(37, 37, 37)
-                                        .addComponent(jButtonRemoveSubjectsHOP))))
-                            .addComponent(jScrollPane11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel23))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonSaveSuggestedSubjects))))
+                        .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelStatusHOP, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButtonSaveSuggestedSubjects, javax.swing.GroupLayout.Alignment.TRAILING)))
         );
 
         jPanel9.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -735,8 +766,39 @@ public class GUI_Main extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldTeacherHOPActionPerformed
 
     private void jButtonSaveNewSuggestionHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveNewSuggestionHOPActionPerformed
-        // TODO add your handling code here:
+        String title;
+        String description;
+        String teacher;
+        
+        if (jTextFieldTitleHOP.getText().length() > 0 && jTextAreaDescriptionHOP.getText().length() > 0 && jTextFieldTeacherHOP.getText().length() > 0) {
+            title = jTextFieldTitleHOP.getText();
+            description = jTextAreaDescriptionHOP.getText();
+            teacher = jTextFieldTeacherHOP.getText();
+            ElectiveSubject subject = new ElectiveSubject(title, description, teacher, 0, 0);
+            ctr.insertIntoPool("s", subject);
+            refreshListsHOP();
+        }
+        else {
+            jLabelStatusHOP.setText("All fields must be filled.");
+        }
     }//GEN-LAST:event_jButtonSaveNewSuggestionHOPActionPerformed
+
+    private void jButtonAddSubjectsHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddSubjectsHOPActionPerformed
+        if (jListSuggestedSubjects.getSelectedValue() != null) {
+            ElectiveSubject subject = (ElectiveSubject) jListSuggestedSubjects.getSelectedValue();
+            subjectListFinalModel.addElement(subject);
+            subjectListModel.removeElement(subject);
+        }
+
+    }//GEN-LAST:event_jButtonAddSubjectsHOPActionPerformed
+
+    private void jButtonRemoveSubjectsHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveSubjectsHOPActionPerformed
+        if (jListSuggestedSubjectsFinal.getSelectedValue() != null) {
+            ElectiveSubject subject = (ElectiveSubject) jListSuggestedSubjectsFinal.getSelectedValue();
+            subjectListModel.addElement(subject);
+            subjectListFinalModel.removeElement(subject);
+        }
+    }//GEN-LAST:event_jButtonRemoveSubjectsHOPActionPerformed
 
     /**
      * @param args the command line arguments
@@ -797,10 +859,10 @@ public class GUI_Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabelStatusHOP;
     private javax.swing.JList jList1stprio;
     private javax.swing.JList jList3;
     private javax.swing.JList jList4;
@@ -823,7 +885,7 @@ public class GUI_Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
-    private javax.swing.JScrollPane jScrollPane11;
+    private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -836,7 +898,7 @@ public class GUI_Main extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextAreaHOP;
+    private javax.swing.JTextArea jTextAreaDescriptionHOP;
     private javax.swing.JTextField jTextFieldTeacher;
     private javax.swing.JTextField jTextFieldTeacherHOP;
     private javax.swing.JTextField jTextFieldTitle;

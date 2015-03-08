@@ -66,4 +66,9 @@ public class ElectiveSubject {
         this.secondPriorityCount = secondPriorityCount;
     }
     
+    @Override
+    public String toString() {
+        return title;
+    }
+    
 }
