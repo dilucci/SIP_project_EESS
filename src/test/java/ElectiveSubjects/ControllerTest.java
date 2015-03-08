@@ -49,25 +49,25 @@ public class ControllerTest {
     
     @Test
     public void testInsertIntoPool() throws Exception {
-        controller.insertIntoPoolA(subject1);
+        controller.insertIntoPool("a", subject1);
         assertThat(controller.getPoolA().contains(subject1), is(true));
         assertThat(controller.getPoolA().size(), is(1));
         
-        controller.insertIntoPoolA(subject2);
+        controller.insertIntoPool("a", subject2);
         assertThat(controller.getPoolA().contains(subject2), is(true));
         assertThat(controller.getPoolA().size(), is(2));
         
-        controller.insertIntoPoolB(subject3);
+        controller.insertIntoPool("b", subject3);
         assertThat(controller.getPoolB().contains(subject3), is(true));
         assertThat(controller.getPoolB().size(), is(1));
     }
     
     @Test
     public void testInsertIntoPoolObjAlreadyExists() throws Exception {
-        assertThat(controller.insertIntoPoolA(subject1), is(true));
+        assertThat(controller.insertIntoPool("a", subject1), is(true));
         assertThat(controller.getPoolA().size(), is(1));
         //insert object, which already exists and check if size is still 1
-        assertThat(controller.insertIntoPoolA(subject1), is(false));
+        assertThat(controller.insertIntoPool("a", subject1), is(false));
         assertThat(controller.getPoolA().size(), is(1));
     }
     

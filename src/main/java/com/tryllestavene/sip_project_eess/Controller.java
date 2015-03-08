@@ -18,18 +18,28 @@ public class Controller {
         poolBList = new ArrayList();
     }
 
-    public boolean insertIntoPoolA(ElectiveSubject subject) {
-        if (!poolAList.contains(subject)) {
+    public boolean insertIntoPool(String pool, ElectiveSubject subject){
+        if(pool.toLowerCase().equals("a")){
+            if(!poolAList.contains(subject)) {
             poolAList.add(subject);
             return true;
+             }
         }
-        return false;
-    }
-    
-    public boolean insertIntoPoolB(ElectiveSubject subject) {
-        if (!poolBList.contains(subject)) {
+        
+        //remove from poolB if string = b
+        if(pool.toLowerCase().equals("b")){
+            if(!poolBList.contains(subject)) {
             poolBList.add(subject);
             return true;
+            }
+        }
+        
+        //remove from subjectList(1st round) if string = s
+        if(pool.toLowerCase().equals("s")){
+            if (!subjectList.contains(subject)) {
+            subjectList.add(subject);
+            return true;
+            }
         }
         return false;
     }
