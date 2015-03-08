@@ -73,6 +73,11 @@ public class ControllerTest {
     
     @Test
     public void removeFromPool() throws Exception {
-        
+        assertThat(controller.insertIntoPool("a", subject1), is(true));
+        assertThat(controller.insertIntoPool("a", subject2), is(true));
+        assertThat(controller.getPoolA().size(), is(2));
+        assertThat(controller.removeFromPool("a", subject1), is(true));
+        assertThat(controller.getPoolA().size(), is(1));
+        assertThat(controller.getPoolA().contains(subject1), is(false));
     }
 }
