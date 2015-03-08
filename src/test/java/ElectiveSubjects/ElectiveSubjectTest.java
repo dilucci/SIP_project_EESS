@@ -34,5 +34,4 @@ public class ElectiveSubjectTest {
         ElectiveSubject subject = new ElectiveSubject(subjectIF, "Android", "sygt det er sejt det android", "Peter", 4, 2);
         assertThat(subject.getTitle(), is("Android"));
     }
-    
 }

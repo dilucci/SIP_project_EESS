@@ -33,6 +33,28 @@ public class Controller {
         }
         return false;
     }
+    
+    public boolean removeFromPool(String pool, ElectiveSubject subject){
+        //remove from poolA if string = a
+        if(pool.toLowerCase().equals("a")){
+            poolAList.remove(subject);
+            return true;
+        }
+        
+        //remove from poolB if string = b
+        if(pool.toLowerCase().equals("b")){
+            poolBList.remove(subject);
+            return true;
+        }
+        
+        //remove from subjectList(1st round) if string = s
+        if(pool.toLowerCase().equals("s")){
+            subjectList.remove(subject);
+            return true;
+        }
+        
+        return false;
+    }
 
     public ArrayList<ElectiveSubject> getPoolA() {
         return poolAList;
