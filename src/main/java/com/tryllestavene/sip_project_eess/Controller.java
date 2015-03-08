@@ -11,11 +11,13 @@ public class Controller {
     private ArrayList<ElectiveSubject> subjectList;
     private ArrayList<ElectiveSubject> poolAList;
     private ArrayList<ElectiveSubject> poolBList;
+    private ArrayList<ElectiveSubject> subjectListFinal;
     
     public Controller() {
         subjectList = new ArrayList();
-        poolAList = new ArrayList<>();
+        poolAList = new ArrayList();
         poolBList = new ArrayList();
+        subjectListFinal = new ArrayList();
     }
     
     public void initialize(){
@@ -35,7 +37,7 @@ public class Controller {
              }
         }
         
-        //remove from poolB if string = b
+        //insert into poolB if string = b
         if(pool.toLowerCase().equals("b")){
             if(!poolBList.contains(subject)) {
             poolBList.add(subject);
@@ -43,14 +45,27 @@ public class Controller {
             }
         }
         
-        //remove from subjectList(1st round) if string = s
+        //insert into subjectList(1st round) if string = s
         if(pool.toLowerCase().equals("s")){
             if (!subjectList.contains(subject)) {
             subjectList.add(subject);
             return true;
             }
         }
+        
+        //insert into subjectListFinal(2st round) if string = f
+        if(pool.toLowerCase().equals("f")){
+            if (!subjectListFinal.contains(subject)) {
+            subjectListFinal.add(subject);
+            return true;
+            }
+        }
+
         return false;
+    }
+    
+    public void setSubjectListFinal(ArrayList<ElectiveSubject> list) {
+        subjectListFinal = list;
     }
     
     public boolean removeFromPool(String pool, ElectiveSubject subject){
@@ -78,12 +93,17 @@ public class Controller {
             }
         }
         
+        //remove from subjectListFinal(2st round) if string = f
+        if(pool.toLowerCase().equals("f")){
+            if (subjectListFinal.contains(subject)) {
+            subjectListFinal.remove(subject);
+            return true;
+            }
+        }
+        
         return false;
     }
 
-    public ArrayList<ElectiveSubject> getAllSubjects() {
-        return subjectList;
-    }
     
     public ArrayList<ElectiveSubject> getPoolA() {
         return poolAList;
@@ -91,5 +111,13 @@ public class Controller {
 
     public ArrayList<ElectiveSubject> getPoolB() {
         return poolBList;
+    }
+    
+    public ArrayList<ElectiveSubject> getAllSubjects() {
+        return subjectList;
+    }
+    
+    public ArrayList<ElectiveSubject> getAllSubjectsFinal() {
+        return subjectListFinal;
     }
 }
