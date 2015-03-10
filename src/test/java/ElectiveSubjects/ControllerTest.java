@@ -147,6 +147,9 @@ public class ControllerTest {
         controller.insertIntoPool("a", subject3);
         controller.insertIntoPool("b", subject4);
         controller.insertIntoPool("b", subject2);
-        controller.calculate(poolAList, poolBList);
+        assertThat(controller.calculate(poolAList, poolBList).size(), is(3));
+        assertThat(student1.getSatisfaction(),is(3));
+        assertThat(student2.getSatisfaction(),is(2));
+        assertThat(student3.getSatisfaction(),is(-3));
     }
 }

@@ -159,10 +159,19 @@ public class Controller {
         return subjectFinalList;
     }
     
-    public void calculate(ArrayList poolA, ArrayList poolB){
-        if (true) {
+    public ArrayList calculate(ArrayList<ElectiveSubject> poolA, ArrayList<ElectiveSubject> poolB){
+        for (Student student : validVoteStudentList) {
+            ArrayList<ElectiveSubject> firstPrioSubjects = student.getFirstPriosList();
+            ArrayList<ElectiveSubject> secondPrioSubjects = student.getSecondPriosList();
+
+            if ((poolA.contains(firstPrioSubjects.get(0)) || poolA.contains(firstPrioSubjects.get(1))) && (poolB.contains(firstPrioSubjects.get(0)) || poolB.contains(firstPrioSubjects.get(1)))) {
+                //indeholder 2 første prioritet. score = 3
+            }
+            
+            
             
         }
+        return validVoteStudentList;
     }
     
     public boolean acceptStudentVote(Student student) {
