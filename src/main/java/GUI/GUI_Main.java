@@ -70,8 +70,6 @@ public class GUI_Main extends javax.swing.JFrame {
         for (ElectiveSubject subject : subjectListFinal) {
             Object[] electiveSubjectArray = new Object[3];
             electiveSubjectArray[0] = subject.getTitle();
-            electiveSubjectArray[1] = subject.getFirstPriorityCount();
-            electiveSubjectArray[2] = subject.getSecondPriorityCount();
             subjectsFinalTableModel.addRow(electiveSubjectArray);
         }
         jTableSubjectsFinalHOP.setModel(subjectsFinalTableModel);
@@ -886,7 +884,7 @@ public class GUI_Main extends javax.swing.JFrame {
             title = jTextFieldTitleHOP.getText();
             description = jTextAreaDescriptionHOP.getText();
             teacher = jTextFieldTeacherHOP.getText();
-            ElectiveSubject subject = new ElectiveSubject(title, description, teacher, 0, 0);
+            ElectiveSubject subject = new ElectiveSubject(title, description, teacher);
             ctr.insertIntoPool("s", subject);
             refreshListsHOP();
         }

@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * @author Michael
  */
 public class Student {
+
     private String firstName;
     private String lastName;
     private ArrayList<ElectiveSubject> firstPriosList;
@@ -37,16 +38,28 @@ public class Student {
         return firstPriosList;
     }
 
-    public void addFirstPriosArray(ElectiveSubject subject) {
-        firstPriosList.add(subject);
+    public boolean addFirstPrioSubject(ElectiveSubject subject) {
+        if (firstPriosList.size() < 2) {
+            if (!firstPriosList.contains(subject)) {
+                firstPriosList.add(subject);
+                return true;
+            }
+        }
+        return false;
     }
 
     public ArrayList getSecondPriosList() {
         return secondPriosList;
     }
 
-    public void addSecondPriosArray(ElectiveSubject subject) {
-        secondPriosList.add(subject);
+    public boolean addSecondPrioSubject(ElectiveSubject subject) {
+        if (secondPriosList.size() < 2) {
+            if (!secondPriosList.contains(subject)) {
+                secondPriosList.add(subject);
+                return true;
+            }
+        }
+        return false;
     }
 
     public Student(String firstName, String lastName) {
@@ -55,5 +68,5 @@ public class Student {
         firstPriosList = new ArrayList();
         secondPriosList = new ArrayList();
     }
-    
+
 }

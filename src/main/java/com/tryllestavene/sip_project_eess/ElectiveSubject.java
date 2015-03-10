@@ -14,16 +14,12 @@ public class ElectiveSubject {
     private String title;
     private String description;
     private String proposedTeacher;
-    private int firstPriorityCount;
-    private int secondPriorityCount;
 
-    public ElectiveSubject(String title, String description, String proposedTeacher, int firstPriorityCount, int secondPriorityCount) {
+    public ElectiveSubject(String title, String description, String proposedTeacher) {
         //this.subjectIF = subjectIF;
         this.title = title;
         this.description = description;
         this.proposedTeacher = proposedTeacher;
-        this.firstPriorityCount = firstPriorityCount;
-        this.secondPriorityCount = secondPriorityCount;
     }
 
     public String getTitle() {
@@ -48,22 +44,6 @@ public class ElectiveSubject {
 
     public void setProposedTeacher(String proposedTeacher) {
         this.proposedTeacher = proposedTeacher;
-    }
-
-    public int getFirstPriorityCount() {
-        return firstPriorityCount;
-    }
-
-    public void setFirstPriorityCount(int firstPriorityCount) {
-        this.firstPriorityCount = firstPriorityCount;
-    }
-
-    public int getSecondPriorityCount() {
-        return secondPriorityCount;
-    }
-
-    public void setSecondPriorityCount(int secondPriorityCount) {
-        this.secondPriorityCount = secondPriorityCount;
     }
     
     @Override

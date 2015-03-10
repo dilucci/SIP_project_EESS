@@ -21,9 +21,9 @@ public class Controller {
     }
     
     public void initialize(){
-        ElectiveSubject subject1 = new ElectiveSubject("Android", "nice", "Peter", 2, 1);
-        ElectiveSubject subject2 = new ElectiveSubject("C#", "fedt", "Torben", 1, 2);
-        ElectiveSubject subject3 = new ElectiveSubject("Arduino", "sejt", "Tobias", 0, 0);
+        ElectiveSubject subject1 = new ElectiveSubject("Android", "nice", "Peter");
+        ElectiveSubject subject2 = new ElectiveSubject("C#", "fedt", "Torben");
+        ElectiveSubject subject3 = new ElectiveSubject("Arduino", "sejt", "Tobias");
         insertIntoPool("s", subject1);
         insertIntoPool("s", subject2);
         insertIntoPool("s", subject3);
