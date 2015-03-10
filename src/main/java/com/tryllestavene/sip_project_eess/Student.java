@@ -17,6 +17,15 @@ public class Student {
     private String lastName;
     private ArrayList<ElectiveSubject> firstPriosList;
     private ArrayList<ElectiveSubject> secondPriosList;
+    private int satisfaction;
+
+    public int getSatisfaction() {
+        return satisfaction;
+    }
+
+    public void setSatisfaction(int satisfaction) {
+        this.satisfaction = satisfaction;
+    }
 
     public String getFirstName() {
         return firstName;
