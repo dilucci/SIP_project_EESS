@@ -14,6 +14,24 @@ public class ElectiveSubject {
     private String title;
     private String description;
     private String proposedTeacher;
+    private int firstPrioCounter;
+    private int secondPrioCounter;
+
+    public int getFirstPrioCounter() {
+        return firstPrioCounter;
+    }
+
+    public void incrementFirstPrio() {
+        firstPrioCounter = firstPrioCounter + 1;
+    }
+
+    public int getSecondPrioCounter() {
+        return secondPrioCounter;
+    }
+
+    public void incrementSecondPrioCounter() {
+        secondPrioCounter = secondPrioCounter + 1;
+    }
 
     public ElectiveSubject(String title, String description, String proposedTeacher) {
         //this.subjectIF = subjectIF;

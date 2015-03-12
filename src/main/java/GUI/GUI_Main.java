@@ -11,7 +11,6 @@ import com.tryllestavene.sip_project_eess.Student;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -27,6 +26,9 @@ public class GUI_Main extends javax.swing.JFrame {
     private DefaultListModel selectedFirstPrioritiesModel;
     private DefaultListModel selectedSecondPrioritiesModel;
     private DefaultTableModel subjectsFinalTableModel;
+    private DefaultTableModel poolASubjectsTableModel;
+    private DefaultTableModel poolBSubjectsTableModel;
+    private DefaultTableModel studentsTableModel;
     private DefaultComboBoxModel studentsModel;
 
     public GUI_Main() {
@@ -35,10 +37,13 @@ public class GUI_Main extends javax.swing.JFrame {
         subjectListModel = new DefaultListModel();
         subjectListFinalModel = new DefaultListModel();
         subjectsFinalTableModel = new DefaultTableModel();
+        poolASubjectsTableModel = new DefaultTableModel();
+        poolBSubjectsTableModel = new DefaultTableModel();
+        studentsTableModel = new DefaultTableModel();
         selectedFirstPrioritiesModel = new DefaultListModel();
         selectedSecondPrioritiesModel = new DefaultListModel();
         studentsModel = new DefaultComboBoxModel();
-        refreshTablesHOP();
+        refreshSubjectsFinalTableHOP();
 
         initUI();
 
@@ -48,10 +53,10 @@ public class GUI_Main extends javax.swing.JFrame {
         ctr.initialize(); //initializes program with dummy objects
         initComboBox();
         refreshListsHOP();
-        startSubjectFinalTable();
+        initializeTablesHOP();
     }
-    
-    private void initComboBox(){
+
+    private void initComboBox() {
         ArrayList<Student> students = ctr.getAllStudents();
         for (Student student : students) {
             studentsModel.addElement(student);
@@ -59,11 +64,38 @@ public class GUI_Main extends javax.swing.JFrame {
         jComboBoxStudents.setModel(studentsModel);
     }
 
-    private void startSubjectFinalTable() {
+    private void refreshListsStudent() {
+        subjectListFinalModel.clear();
+        selectedFirstPrioritiesModel.clear();
+        selectedSecondPrioritiesModel.clear();
+        ArrayList<ElectiveSubject> subjectListFinal = ctr.getAllSubjectsFinal();
+        for (ElectiveSubject subject : subjectListFinal) {
+            subjectListFinalModel.addElement(subject);
+        }
+        jListElectiveSubjectStudent.setModel(subjectListFinalModel);
+    }
+
+    private void initializeTablesHOP() {
         subjectsFinalTableModel.setColumnCount(0);
-        subjectsFinalTableModel.addColumn("Title");
-        subjectsFinalTableModel.addColumn("1st prio");
-        subjectsFinalTableModel.addColumn("2nd prio");
+        subjectsFinalTableModel.addColumn("Subject");
+        subjectsFinalTableModel.addColumn("1st");
+        subjectsFinalTableModel.addColumn("2nd");
+
+        studentsTableModel.setColumnCount(0);
+        studentsTableModel.addColumn("Name");
+        studentsTableModel.addColumn("1st");
+        studentsTableModel.addColumn("2nd");
+        studentsTableModel.addColumn("Satisfaction");
+
+        poolASubjectsTableModel.setColumnCount(0);
+        poolASubjectsTableModel.addColumn("Subject");
+        poolASubjectsTableModel.addColumn("1st");
+        poolASubjectsTableModel.addColumn("2nd");
+
+        poolBSubjectsTableModel.setColumnCount(0);
+        poolBSubjectsTableModel.addColumn("Subject");
+        poolBSubjectsTableModel.addColumn("1st");
+        poolBSubjectsTableModel.addColumn("2nd");
     }
 
     private void refreshListsHOP() {
@@ -77,7 +109,7 @@ public class GUI_Main extends javax.swing.JFrame {
         jListSuggestedSubjectsFinal.setModel(subjectListFinalModel);
     }
 
-    private void refreshTablesHOP() {
+    private void refreshSubjectsFinalTableHOP() {
         subjectsFinalTableModel.setRowCount(0);
         subjectsFinalTableModel.getDataVector().removeAllElements();
         subjectsFinalTableModel.fireTableDataChanged();
@@ -85,10 +117,29 @@ public class GUI_Main extends javax.swing.JFrame {
         subjectListFinal = ctr.getAllSubjectsFinal();
         for (ElectiveSubject subject : subjectListFinal) {
             Object[] electiveSubjectArray = new Object[3];
-            electiveSubjectArray[0] = subject.getTitle();
+            electiveSubjectArray[0] = subject;
+            electiveSubjectArray[1] = subject.getFirstPrioCounter();
+            electiveSubjectArray[2] = subject.getSecondPrioCounter();
             subjectsFinalTableModel.addRow(electiveSubjectArray);
         }
         jTableSubjectsFinalHOP.setModel(subjectsFinalTableModel);
+    }
+
+    private void refreshStudentTableHOP() {
+        studentsTableModel.setRowCount(0);
+        studentsTableModel.getDataVector().removeAllElements();
+        studentsTableModel.fireTableDataChanged();
+        ArrayList<Student> studentList;
+        studentList = ctr.getAllStudents();
+        for (Student student : studentList) {
+            Object[] studentsArray = new Object[4];
+            studentsArray[0] = student.getFirstName() + " " + student.getLastName();
+            studentsArray[1] = student.getFirstPriosList();
+            studentsArray[2] = student.getSecondPriosList();
+            studentsArray[3] = student.getSatisfaction();
+            studentsTableModel.addRow(studentsArray);
+        }
+        jTableStudentsHOP.setModel(studentsTableModel);
     }
 
     /**
@@ -174,10 +225,18 @@ public class GUI_Main extends javax.swing.JFrame {
         jTable2 = new javax.swing.JTable();
         jPanel12 = new javax.swing.JPanel();
         jScrollPane11 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        jTablePoolB = new javax.swing.JTable();
         jScrollPane13 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        jTablePoolA = new javax.swing.JTable();
+        jButtonAddToPoolAHOP = new javax.swing.JButton();
+        jButtonRemoveFromPoolAHOP = new javax.swing.JButton();
+        jButtonAddToPoolBHOP = new javax.swing.JButton();
+        jButtonRemoveFromPoolBHOP = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
+        jScrollPane14 = new javax.swing.JScrollPane();
+        jTableStudentsHOP = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -223,6 +282,12 @@ public class GUI_Main extends javax.swing.JFrame {
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane2.setViewportView(jTextArea1);
+
+        jComboBoxStudents.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxStudentsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -595,14 +660,16 @@ public class GUI_Main extends javax.swing.JFrame {
                             .addComponent(jLabel13)
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addGap(4, 4, 4)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButtonAddSubjectsHOP)
-                                    .addComponent(jButtonRemoveSubjectsHOP))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel5))
+                                    .addComponent(jLabel5)
+                                    .addGroup(jPanel8Layout.createSequentialGroup()
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jButtonAddSubjectsHOP)
+                                            .addComponent(jButtonRemoveSubjectsHOP))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addContainerGap(15, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -630,20 +697,18 @@ public class GUI_Main extends javax.swing.JFrame {
                 .addComponent(jButtonSaveNewSuggestionHOP)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                        .addComponent(jLabel5)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(jButtonAddSubjectsHOP)
-                                .addGap(27, 27, 27)
-                                .addComponent(jButtonRemoveSubjectsHOP)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonAddSubjectsHOP)
+                        .addGap(27, 27, 27)
+                        .addComponent(jButtonRemoveSubjectsHOP)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -679,6 +744,11 @@ public class GUI_Main extends javax.swing.JFrame {
         jTableSubjectsFinalHOP.setColumnSelectionAllowed(true);
         jScrollPane7.setViewportView(jTableSubjectsFinalHOP);
         jTableSubjectsFinalHOP.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (jTableSubjectsFinalHOP.getColumnModel().getColumnCount() > 0) {
+            jTableSubjectsFinalHOP.getColumnModel().getColumn(0).setResizable(false);
+            jTableSubjectsFinalHOP.getColumnModel().getColumn(1).setResizable(false);
+            jTableSubjectsFinalHOP.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         jPanel10.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -743,26 +813,7 @@ public class GUI_Main extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Subject", "1st", "2nd"
-            }
-        ));
-        jTable3.setColumnSelectionAllowed(true);
-        jScrollPane11.setViewportView(jTable3);
-        jTable3.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        jTablePoolB.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -785,24 +836,111 @@ public class GUI_Main extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable4.setColumnSelectionAllowed(true);
-        jScrollPane13.setViewportView(jTable4);
-        jTable4.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTablePoolB.setColumnSelectionAllowed(true);
+        jScrollPane11.setViewportView(jTablePoolB);
+        jTablePoolB.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (jTablePoolB.getColumnModel().getColumnCount() > 0) {
+            jTablePoolB.getColumnModel().getColumn(0).setResizable(false);
+            jTablePoolB.getColumnModel().getColumn(1).setResizable(false);
+            jTablePoolB.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        jTablePoolA.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Subject", "1st", "2nd"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTablePoolA.setColumnSelectionAllowed(true);
+        jScrollPane13.setViewportView(jTablePoolA);
+        jTablePoolA.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (jTablePoolA.getColumnModel().getColumnCount() > 0) {
+            jTablePoolA.getColumnModel().getColumn(0).setResizable(false);
+            jTablePoolA.getColumnModel().getColumn(1).setResizable(false);
+            jTablePoolA.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        jButtonAddToPoolAHOP.setText("+");
+        jButtonAddToPoolAHOP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddToPoolAHOPActionPerformed(evt);
+            }
+        });
+
+        jButtonRemoveFromPoolAHOP.setText("-");
+        jButtonRemoveFromPoolAHOP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRemoveFromPoolAHOPActionPerformed(evt);
+            }
+        });
+
+        jButtonAddToPoolBHOP.setText("+");
+        jButtonAddToPoolBHOP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddToPoolBHOPActionPerformed(evt);
+            }
+        });
+
+        jButtonRemoveFromPoolBHOP.setText("-");
+        jButtonRemoveFromPoolBHOP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRemoveFromPoolBHOPActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setText("Pool A");
+
+        jLabel9.setText("Pool B");
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(35, 35, 35)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addComponent(jButtonAddToPoolAHOP)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonRemoveFromPoolAHOP))
+                            .addComponent(jLabel8))
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addGap(84, 84, 84)
+                                .addComponent(jButtonAddToPoolBHOP)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonRemoveFromPoolBHOP))
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addGap(75, 75, 75)
+                                .addComponent(jLabel9)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel9Layout.createSequentialGroup()
+                                .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(396, 396, 396)
                 .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -819,15 +957,25 @@ public class GUI_Main extends javax.swing.JFrame {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 81, Short.MAX_VALUE))
+                        .addContainerGap(92, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(106, 106, 106)
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-                            .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
-                .addContainerGap())
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonAddToPoolAHOP)
+                            .addComponent(jButtonRemoveFromPoolAHOP)
+                            .addComponent(jButtonAddToPoolBHOP)
+                            .addComponent(jButtonRemoveFromPoolBHOP))
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(43, 43, 43))))
             .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel9Layout.createSequentialGroup()
                     .addContainerGap()
@@ -837,15 +985,48 @@ public class GUI_Main extends javax.swing.JFrame {
 
         jPanel13.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        jTableStudentsHOP.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Name", "1st Prio", "2nd Prio", "Satisfaction"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane14.setViewportView(jTableStudentsHOP);
+        if (jTableStudentsHOP.getColumnModel().getColumnCount() > 0) {
+            jTableStudentsHOP.getColumnModel().getColumn(0).setResizable(false);
+            jTableStudentsHOP.getColumnModel().getColumn(1).setResizable(false);
+            jTableStudentsHOP.getColumnModel().getColumn(2).setResizable(false);
+            jTableStudentsHOP.getColumnModel().getColumn(3).setResizable(false);
+        }
+
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 353, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 453, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -868,7 +1049,7 @@ public class GUI_Main extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 457, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -964,7 +1145,7 @@ public class GUI_Main extends javax.swing.JFrame {
             suggestedSubjectList.add((ElectiveSubject) subjectListFinalModel.getElementAt(i));
         }
         ctr.setSubjectListFinal(suggestedSubjectList);
-        refreshTablesHOP();
+        refreshSubjectsFinalTableHOP();
         jListElectiveSubjectStudent.setModel(subjectListFinalModel);
     }//GEN-LAST:event_jButtonSaveSuggestedSubjectsActionPerformed
 
@@ -988,19 +1169,25 @@ public class GUI_Main extends javax.swing.JFrame {
         if (selectedSecondPrioritiesModel.size() == 2 && selectedFirstPrioritiesModel.size() == 2) {
             Student student = (Student) jComboBoxStudents.getSelectedItem();
             for (int i = 0; i < selectedFirstPrioritiesModel.size(); i++) {
-                student.addFirstPrioSubject((ElectiveSubject)selectedFirstPrioritiesModel.getElementAt(i));
+                student.addFirstPrioSubject((ElectiveSubject) selectedFirstPrioritiesModel.getElementAt(i));
             }
             for (int i = 0; i < selectedSecondPrioritiesModel.size(); i++) {
-                student.addSecondPrioSubject((ElectiveSubject)selectedSecondPrioritiesModel.getElementAt(i));
+                student.addSecondPrioSubject((ElectiveSubject) selectedSecondPrioritiesModel.getElementAt(i));
             }
-            jLabelSelectionStatus.setText("Selection submitted!");
-            ctr.submitStudentVote(student);
+            if (ctr.submitStudentVote(student)) {
+                jComboBoxStudents.removeItem(jComboBoxStudents.getSelectedItem());
+                refreshSubjectsFinalTableHOP();
+                jLabelSelectionStatus.setText("Selection submitted!");
+            }
+            else {
+                jLabelSelectionStatus.setText("Submission failed");
+            }
             System.out.println(student);
             System.out.println(student.getFirstPriosList());
             System.out.println(student.getSecondPriosList());
             System.out.println(ctr.getValidVoteStudentList());
         }
-        else{
+        else {
             jLabelSelectionStatus.setText("You must have 2 subjects for each priority.");
         }
     }//GEN-LAST:event_jButtonSaveSelectedPrioritiesActionPerformed
@@ -1032,6 +1219,67 @@ public class GUI_Main extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButtonSelectFirstPrioActionPerformed
+
+    private void jComboBoxStudentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxStudentsActionPerformed
+        refreshListsStudent();
+    }//GEN-LAST:event_jComboBoxStudentsActionPerformed
+
+    private void jButtonAddToPoolAHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddToPoolAHOPActionPerformed
+        if (jTableSubjectsFinalHOP.getSelectedRow() > -1) {
+            int selectedRowIndex = jTableSubjectsFinalHOP.getSelectedRow();
+            if (subjectsFinalTableModel.getValueAt(selectedRowIndex, 0) instanceof ElectiveSubject) {
+                ElectiveSubject subject = (ElectiveSubject) subjectsFinalTableModel.getValueAt(selectedRowIndex, 0);
+                Object[] subjects = new Object[3];
+                subjects[0] = subject;
+                subjects[1] = subject.getFirstPrioCounter();
+                subjects[2] = subject.getSecondPrioCounter();
+                poolASubjectsTableModel.addRow(subjects);
+                jTablePoolA.setModel(poolASubjectsTableModel);
+            }
+        }
+    }//GEN-LAST:event_jButtonAddToPoolAHOPActionPerformed
+
+    private void jButtonRemoveFromPoolAHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveFromPoolAHOPActionPerformed
+        if (jTablePoolA.getSelectedRow() > -1) {
+            int selectedRowIndex = jTablePoolA.getSelectedRow();
+            poolASubjectsTableModel.removeRow(selectedRowIndex);
+        }
+    }//GEN-LAST:event_jButtonRemoveFromPoolAHOPActionPerformed
+
+    private void jButtonAddToPoolBHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddToPoolBHOPActionPerformed
+        //VIRKER IKKE ENDNU!!
+        
+        if (jTableSubjectsFinalHOP.getSelectedRow() > -1) {
+            int selectedRowIndex = jTableSubjectsFinalHOP.getSelectedRow();
+            if (subjectsFinalTableModel.getValueAt(selectedRowIndex, 0) instanceof ElectiveSubject) {
+                boolean alreadyExists = false;
+                ElectiveSubject chosenSubject = (ElectiveSubject) subjectsFinalTableModel.getValueAt(selectedRowIndex, 0);
+                ElectiveSubject existingSubject;
+                for (int i = 0; i < poolBSubjectsTableModel.getRowCount(); i++) {
+                    existingSubject = (ElectiveSubject) subjectsFinalTableModel.getValueAt(i, 0);
+                    if (chosenSubject == existingSubject) {
+                        alreadyExists = true;
+                    }
+                }
+                if (!alreadyExists) {
+                    ElectiveSubject subject = (ElectiveSubject) subjectsFinalTableModel.getValueAt(selectedRowIndex, 0);
+                    Object[] subjects = new Object[3];
+                    subjects[0] = subject;
+                    subjects[1] = subject.getFirstPrioCounter();
+                    subjects[2] = subject.getSecondPrioCounter();
+                    poolBSubjectsTableModel.addRow(subjects);
+                    jTablePoolB.setModel(poolBSubjectsTableModel);
+                }
+            }
+        }
+    }//GEN-LAST:event_jButtonAddToPoolBHOPActionPerformed
+
+    private void jButtonRemoveFromPoolBHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveFromPoolBHOPActionPerformed
+        if (jTablePoolB.getSelectedRow() > -1) {
+            int selectedRowIndex = jTablePoolB.getSelectedRow();
+            poolBSubjectsTableModel.removeRow(selectedRowIndex);
+        }
+    }//GEN-LAST:event_jButtonRemoveFromPoolBHOPActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1075,8 +1323,12 @@ public class GUI_Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2ndRoundSelect;
     private javax.swing.JButton jButtonAddSubjectsHOP;
+    private javax.swing.JButton jButtonAddToPoolAHOP;
+    private javax.swing.JButton jButtonAddToPoolBHOP;
     private javax.swing.JButton jButtonDeSelectFirstPrio;
     private javax.swing.JButton jButtonDeSelectSecondPrio;
+    private javax.swing.JButton jButtonRemoveFromPoolAHOP;
+    private javax.swing.JButton jButtonRemoveFromPoolBHOP;
     private javax.swing.JButton jButtonRemoveSubjectsHOP;
     private javax.swing.JButton jButtonSaveNewSuggestionHOP;
     private javax.swing.JButton jButtonSaveSelectedPriorities;
@@ -1105,6 +1357,8 @@ public class GUI_Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelSelectionStatus;
     private javax.swing.JLabel jLabelStatusHOP;
     private javax.swing.JList jList4;
@@ -1132,6 +1386,7 @@ public class GUI_Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane13;
+    private javax.swing.JScrollPane jScrollPane14;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -1142,8 +1397,9 @@ public class GUI_Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTable jTable4;
+    private javax.swing.JTable jTablePoolA;
+    private javax.swing.JTable jTablePoolB;
+    private javax.swing.JTable jTableStudentsHOP;
     private javax.swing.JTable jTableSubjectsFinalHOP;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextAreaDescriptionHOP;

@@ -51,6 +51,7 @@ public class Student {
         if (firstPriosList.size() < 2) {
             if (!firstPriosList.contains(subject)) {
                 firstPriosList.add(subject);
+                subject.incrementFirstPrio();
                 return true;
             }
         }
@@ -65,6 +66,7 @@ public class Student {
         if (secondPriosList.size() < 2) {
             if (!secondPriosList.contains(subject)) {
                 secondPriosList.add(subject);
+                subject.incrementSecondPrioCounter();
                 return true;
             }
         }
