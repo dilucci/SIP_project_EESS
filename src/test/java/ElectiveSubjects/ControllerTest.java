@@ -35,9 +35,9 @@ public class ControllerTest {
     private Student student2;
     private Student student3;
     private Controller controller;
-    private ArrayList<ElectiveSubject> subjectList;
-    private ArrayList<ElectiveSubject> poolAList;
-    private ArrayList<ElectiveSubject> poolBList;
+//    private ArrayList<ElectiveSubject> subjectList;
+//    private ArrayList<ElectiveSubject> poolAList;
+//    private ArrayList<ElectiveSubject> poolBList;
     
     
     public ControllerTest() {
@@ -60,9 +60,9 @@ public class ControllerTest {
         student3 = new Student("Nicklas","Thomsen");
         
         controller = new Controller();
-        subjectList = new ArrayList();
-        poolAList = new ArrayList();
-        poolBList = new ArrayList();
+//        subjectList = new ArrayList();
+//        poolAList = new ArrayList();
+//        poolBList = new ArrayList();
     }
     
     @Test
@@ -125,10 +125,10 @@ public class ControllerTest {
     
     @Test
     public void calculateSatisfaction() throws Exception {
-        student1.addFirstPrioSubject(subject1); //happy 1.1 (+3)
-        student1.addFirstPrioSubject(subject2);
-        student1.addSecondPrioSubject(subject3);
-        student1.addSecondPrioSubject(subject4);
+        student1.addFirstPrioSubject(subject1); //happy 1.1 (+3) //Android
+        student1.addFirstPrioSubject(subject2); //C#
+        student1.addSecondPrioSubject(subject3); //Arduino
+        student1.addSecondPrioSubject(subject4); //Game
         assertThat(controller.acceptStudentVote(student1),is(true));
         
         student2.addFirstPrioSubject(subject4); //less happy 1.2 (+2)
@@ -147,7 +147,7 @@ public class ControllerTest {
         controller.insertIntoPool("a", subject3);
         controller.insertIntoPool("b", subject4);
         controller.insertIntoPool("b", subject2);
-        assertThat(controller.calculate(poolAList, poolBList).size(), is(3));
+        assertThat(controller.calculate(controller.getPoolA(), controller.getPoolB()).size(), is(3));
         assertThat(student1.getSatisfaction(),is(3));
         assertThat(student2.getSatisfaction(),is(2));
         assertThat(student3.getSatisfaction(),is(-3));
