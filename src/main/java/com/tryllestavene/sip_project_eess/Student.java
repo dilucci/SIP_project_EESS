@@ -78,4 +78,8 @@ public class Student {
         secondPriosList = new ArrayList();
     }
 
+    @Override
+    public String toString() {
+        return firstName + " " + lastName;
+    }
 }

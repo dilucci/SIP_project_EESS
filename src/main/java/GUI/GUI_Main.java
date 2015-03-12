@@ -7,9 +7,11 @@ package GUI;
 
 import com.tryllestavene.sip_project_eess.Controller;
 import com.tryllestavene.sip_project_eess.ElectiveSubject;
+import com.tryllestavene.sip_project_eess.Student;
 import java.util.ArrayList;
-import java.util.Arrays;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -22,7 +24,10 @@ public class GUI_Main extends javax.swing.JFrame {
     private ArrayList<ElectiveSubject> subjectList;
     private DefaultListModel subjectListModel;
     private DefaultListModel subjectListFinalModel;
+    private DefaultListModel selectedFirstPrioritiesModel;
+    private DefaultListModel selectedSecondPrioritiesModel;
     private DefaultTableModel subjectsFinalTableModel;
+    private DefaultComboBoxModel studentsModel;
 
     public GUI_Main() {
         ctr = new Controller();
@@ -30,6 +35,9 @@ public class GUI_Main extends javax.swing.JFrame {
         subjectListModel = new DefaultListModel();
         subjectListFinalModel = new DefaultListModel();
         subjectsFinalTableModel = new DefaultTableModel();
+        selectedFirstPrioritiesModel = new DefaultListModel();
+        selectedSecondPrioritiesModel = new DefaultListModel();
+        studentsModel = new DefaultComboBoxModel();
         refreshTablesHOP();
 
         initUI();
@@ -38,18 +46,26 @@ public class GUI_Main extends javax.swing.JFrame {
 
     private void initUI() {
         ctr.initialize(); //initializes program with dummy objects
-        subjectList = ctr.getAllSubjects();
+        initComboBox();
         refreshListsHOP();
         startSubjectFinalTable();
     }
     
+    private void initComboBox(){
+        ArrayList<Student> students = ctr.getAllStudents();
+        for (Student student : students) {
+            studentsModel.addElement(student);
+        }
+        jComboBoxStudents.setModel(studentsModel);
+    }
+
     private void startSubjectFinalTable() {
         subjectsFinalTableModel.setColumnCount(0);
         subjectsFinalTableModel.addColumn("Title");
         subjectsFinalTableModel.addColumn("1st prio");
         subjectsFinalTableModel.addColumn("2nd prio");
     }
-    
+
     private void refreshListsHOP() {
         subjectList = ctr.getAllSubjects();
         subjectListModel.clear();
@@ -60,12 +76,12 @@ public class GUI_Main extends javax.swing.JFrame {
         jListSuggestedSubjects.setModel(subjectListModel);
         jListSuggestedSubjectsFinal.setModel(subjectListFinalModel);
     }
-    
+
     private void refreshTablesHOP() {
         subjectsFinalTableModel.setRowCount(0);
         subjectsFinalTableModel.getDataVector().removeAllElements();
         subjectsFinalTableModel.fireTableDataChanged();
-        ArrayList <ElectiveSubject> subjectListFinal;
+        ArrayList<ElectiveSubject> subjectListFinal;
         subjectListFinal = ctr.getAllSubjectsFinal();
         for (ElectiveSubject subject : subjectListFinal) {
             Object[] electiveSubjectArray = new Object[3];
@@ -99,18 +115,25 @@ public class GUI_Main extends javax.swing.JFrame {
         jButtonSaveSuggestionSTUD = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jComboBoxStudents = new javax.swing.JComboBox();
         jPanel6 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jListElectiveSubjectStudent = new javax.swing.JList();
-        jButtonselect1stprio = new javax.swing.JButton();
+        jButtonSelectFirstPrio = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        jButton1stRoundSelect1 = new javax.swing.JButton();
+        jButtonSelectSecondPrio = new javax.swing.JButton();
         jScrollPane8 = new javax.swing.JScrollPane();
-        jList3 = new javax.swing.JList();
+        jListFirstPriorities = new javax.swing.JList();
         jScrollPane9 = new javax.swing.JScrollPane();
-        jList6 = new javax.swing.JList();
+        jListSecondPriorities = new javax.swing.JList();
+        jButtonSaveSelectedPriorities = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jButtonDeSelectFirstPrio = new javax.swing.JButton();
+        jButtonDeSelectSecondPrio = new javax.swing.JButton();
+        jLabelSelectionStatus = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -225,6 +248,7 @@ public class GUI_Main extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBoxStudents, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)
                             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
@@ -238,7 +262,9 @@ public class GUI_Main extends javax.swing.JFrame {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addGap(6, 6, 6)
+                .addComponent(jComboBoxStudents, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -263,17 +289,12 @@ public class GUI_Main extends javax.swing.JFrame {
 
         jLabel11.setText("Selection of elective subjects 1st Round");
 
-        jListElectiveSubjectStudent.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane3.setViewportView(jListElectiveSubjectStudent);
 
-        jButtonselect1stprio.setText("Select 1st Prio");
-        jButtonselect1stprio.addActionListener(new java.awt.event.ActionListener() {
+        jButtonSelectFirstPrio.setText("+");
+        jButtonSelectFirstPrio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonselect1stprioActionPerformed(evt);
+                jButtonSelectFirstPrioActionPerformed(evt);
             }
         });
 
@@ -281,21 +302,43 @@ public class GUI_Main extends javax.swing.JFrame {
 
         jLabel18.setText("select two prio in each list. (Note: Two exactly)");
 
-        jButton1stRoundSelect1.setText("Select 2nd Prio");
-
-        jList3.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        jButtonSelectSecondPrio.setText("+");
+        jButtonSelectSecondPrio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSelectSecondPrioActionPerformed(evt);
+            }
         });
-        jScrollPane8.setViewportView(jList3);
 
-        jList6.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        jScrollPane8.setViewportView(jListFirstPriorities);
+
+        jScrollPane9.setViewportView(jListSecondPriorities);
+
+        jButtonSaveSelectedPriorities.setText("Submit selection");
+        jButtonSaveSelectedPriorities.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSaveSelectedPrioritiesActionPerformed(evt);
+            }
         });
-        jScrollPane9.setViewportView(jList6);
+
+        jLabel6.setText("First priorities:");
+
+        jLabel7.setText("Second Priorities:");
+
+        jButtonDeSelectFirstPrio.setText("-");
+        jButtonDeSelectFirstPrio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeSelectFirstPrioActionPerformed(evt);
+            }
+        });
+
+        jButtonDeSelectSecondPrio.setText("-");
+        jButtonDeSelectSecondPrio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeSelectSecondPrioActionPerformed(evt);
+            }
+        });
+
+        jLabelSelectionStatus.setText("....");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -304,20 +347,37 @@ public class GUI_Main extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel18)
-                    .addComponent(jLabel17)
-                    .addComponent(jLabel11)
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel6Layout.createSequentialGroup()
-                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jButtonselect1stprio)
-                                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jScrollPane9)
-                                .addComponent(jButton1stRoundSelect1, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)))))
-                .addContainerGap(20, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel18)
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel11)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel6Layout.createSequentialGroup()
+                                        .addComponent(jButtonSelectFirstPrio)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButtonDeSelectFirstPrio))
+                                    .addComponent(jLabel6)
+                                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(43, 43, 43)
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel6Layout.createSequentialGroup()
+                                        .addComponent(jButtonSelectSecondPrio)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButtonDeSelectSecondPrio))
+                                    .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7))))
+                        .addContainerGap(98, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelSelectionStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(117, 117, 117)
+                .addComponent(jButtonSaveSelectedPriorities)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -332,35 +392,35 @@ public class GUI_Main extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1stRoundSelect1)
-                    .addComponent(jButtonselect1stprio))
+                    .addComponent(jButtonSelectSecondPrio)
+                    .addComponent(jButtonSelectFirstPrio)
+                    .addComponent(jButtonDeSelectFirstPrio)
+                    .addComponent(jButtonDeSelectSecondPrio))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                    .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelSelectionStatus)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
-                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(54, 54, 54))
+                .addComponent(jButtonSaveSelectedPriorities)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel14.setText("Selection of elective subjects 2nd Round");
 
-        jList4.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane5.setViewportView(jList4);
 
         jLabel15.setText("Pool A");
 
         jLabel16.setText("Pool B");
 
-        jList5.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane6.setViewportView(jList5);
 
         jButton2ndRoundSelect.setText("Save Selection");
@@ -374,24 +434,25 @@ public class GUI_Main extends javax.swing.JFrame {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel14)
-                    .addComponent(jButton2ndRoundSelect)
                     .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGap(39, 39, 39)
-                                .addComponent(jLabel15)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGap(39, 39, 39)
-                                .addComponent(jLabel16))))
-                    .addComponent(jLabel19)
-                    .addComponent(jLabel20))
+                            .addComponent(jLabel14)
+                            .addComponent(jButton2ndRoundSelect)
+                            .addComponent(jLabel19)
+                            .addComponent(jLabel20)))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(57, 57, 57)
+                        .addComponent(jLabel15)
+                        .addGap(106, 106, 106)
+                        .addComponent(jLabel16))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(60, 60, 60)))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
@@ -415,7 +476,7 @@ public class GUI_Main extends javax.swing.JFrame {
                         .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(42, 42, 42)
                 .addComponent(jButton2ndRoundSelect)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -486,11 +547,6 @@ public class GUI_Main extends javax.swing.JFrame {
             }
         });
 
-        jListSuggestedSubjects.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane1.setViewportView(jListSuggestedSubjects);
 
         jLabel5.setText("List of suggested subjects");
@@ -509,11 +565,6 @@ public class GUI_Main extends javax.swing.JFrame {
             }
         });
 
-        jListSuggestedSubjectsFinal.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane12.setViewportView(jListSuggestedSubjectsFinal);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
@@ -543,8 +594,9 @@ public class GUI_Main extends javax.swing.JFrame {
                                     .addComponent(jTextFieldTeacherHOP, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel13)
                             .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addGap(4, 4, 4)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jButtonAddSubjectsHOP)
                                     .addComponent(jButtonRemoveSubjectsHOP))
@@ -576,23 +628,23 @@ public class GUI_Main extends javax.swing.JFrame {
                     .addComponent(jLabel12))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonSaveNewSuggestionHOP)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(jLabel5)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                        .addComponent(jLabel5)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addGap(26, 26, 26)
                                 .addComponent(jButtonAddSubjectsHOP)
                                 .addGap(27, 27, 27)
-                                .addComponent(jButtonRemoveSubjectsHOP)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                                .addComponent(jButtonRemoveSubjectsHOP)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelStatusHOP, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -820,7 +872,7 @@ public class GUI_Main extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Head Programmer", jPanel3);
+        jTabbedPane1.addTab("Head of program", jPanel3);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -863,10 +915,6 @@ public class GUI_Main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldTitleActionPerformed
 
-    private void jButtonselect1stprioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonselect1stprioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonselect1stprioActionPerformed
-
     private void jTextFieldTitleHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTitleHOPActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldTitleHOPActionPerformed
@@ -879,7 +927,7 @@ public class GUI_Main extends javax.swing.JFrame {
         String title;
         String description;
         String teacher;
-        
+
         if (jTextFieldTitleHOP.getText().length() > 0 && jTextAreaDescriptionHOP.getText().length() > 0 && jTextFieldTeacherHOP.getText().length() > 0) {
             title = jTextFieldTitleHOP.getText();
             description = jTextAreaDescriptionHOP.getText();
@@ -918,20 +966,72 @@ public class GUI_Main extends javax.swing.JFrame {
         ctr.setSubjectListFinal(suggestedSubjectList);
         refreshTablesHOP();
         jListElectiveSubjectStudent.setModel(subjectListFinalModel);
-        
-        
-        
-        
-//        ArrayList<ElectiveSubject> finalList = new ArrayList();
-//        ElectiveSubject subject;
-//        for (Object object : array) {
-//            subject = (ElectiveSubject) object;
-//            finalList.add(subject);
-//        }
-//        ctr.setSubjectListFinal(finalList);
-        
-        
     }//GEN-LAST:event_jButtonSaveSuggestedSubjectsActionPerformed
+
+    private void jButtonDeSelectSecondPrioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeSelectSecondPrioActionPerformed
+        if (jListSecondPriorities.getSelectedValue() != null) {
+            ElectiveSubject subject = (ElectiveSubject) jListSecondPriorities.getSelectedValue();
+            subjectListFinalModel.addElement(subject);
+            selectedSecondPrioritiesModel.removeElement(subject);
+        }
+    }//GEN-LAST:event_jButtonDeSelectSecondPrioActionPerformed
+
+    private void jButtonDeSelectFirstPrioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeSelectFirstPrioActionPerformed
+        if (jListFirstPriorities.getSelectedValue() != null) {
+            ElectiveSubject subject = (ElectiveSubject) jListFirstPriorities.getSelectedValue();
+            subjectListFinalModel.addElement(subject);
+            selectedFirstPrioritiesModel.removeElement(subject);
+        }
+    }//GEN-LAST:event_jButtonDeSelectFirstPrioActionPerformed
+
+    private void jButtonSaveSelectedPrioritiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveSelectedPrioritiesActionPerformed
+        if (selectedSecondPrioritiesModel.size() == 2 && selectedFirstPrioritiesModel.size() == 2) {
+            Student student = (Student) jComboBoxStudents.getSelectedItem();
+            for (int i = 0; i < selectedFirstPrioritiesModel.size(); i++) {
+                student.addFirstPrioSubject((ElectiveSubject)selectedFirstPrioritiesModel.getElementAt(i));
+            }
+            for (int i = 0; i < selectedSecondPrioritiesModel.size(); i++) {
+                student.addSecondPrioSubject((ElectiveSubject)selectedSecondPrioritiesModel.getElementAt(i));
+            }
+            jLabelSelectionStatus.setText("Selection submitted!");
+            ctr.submitStudentVote(student);
+            System.out.println(student);
+            System.out.println(student.getFirstPriosList());
+            System.out.println(student.getSecondPriosList());
+            System.out.println(ctr.getValidVoteStudentList());
+        }
+        else{
+            jLabelSelectionStatus.setText("You must have 2 subjects for each priority.");
+        }
+    }//GEN-LAST:event_jButtonSaveSelectedPrioritiesActionPerformed
+
+    private void jButtonSelectSecondPrioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSelectSecondPrioActionPerformed
+        if (jListElectiveSubjectStudent.getSelectedValue() != null) {
+            if (selectedSecondPrioritiesModel.size() < 2) {
+                ElectiveSubject subject = (ElectiveSubject) jListElectiveSubjectStudent.getSelectedValue();
+                selectedSecondPrioritiesModel.addElement(subject);
+                jListSecondPriorities.setModel(selectedSecondPrioritiesModel);
+                subjectListFinalModel.removeElement(subject);
+            }
+            else {
+                jLabelSelectionStatus.setText("Select only 2 subjects");
+            }
+        }
+    }//GEN-LAST:event_jButtonSelectSecondPrioActionPerformed
+
+    private void jButtonSelectFirstPrioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSelectFirstPrioActionPerformed
+        if (jListElectiveSubjectStudent.getSelectedValue() != null) {
+            if (selectedFirstPrioritiesModel.size() < 2) {
+                ElectiveSubject subject = (ElectiveSubject) jListElectiveSubjectStudent.getSelectedValue();
+                selectedFirstPrioritiesModel.addElement(subject);
+                jListFirstPriorities.setModel(selectedFirstPrioritiesModel);
+                subjectListFinalModel.removeElement(subject);
+            }
+            else {
+                jLabelSelectionStatus.setText("Select only 2 subjects");
+            }
+        }
+    }//GEN-LAST:event_jButtonSelectFirstPrioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -949,13 +1049,17 @@ public class GUI_Main extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
+        }
+        catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(GUI_Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
+        }
+        catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(GUI_Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        }
+        catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(GUI_Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        }
+        catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(GUI_Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
@@ -969,14 +1073,18 @@ public class GUI_Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1stRoundSelect1;
     private javax.swing.JButton jButton2ndRoundSelect;
     private javax.swing.JButton jButtonAddSubjectsHOP;
+    private javax.swing.JButton jButtonDeSelectFirstPrio;
+    private javax.swing.JButton jButtonDeSelectSecondPrio;
     private javax.swing.JButton jButtonRemoveSubjectsHOP;
     private javax.swing.JButton jButtonSaveNewSuggestionHOP;
+    private javax.swing.JButton jButtonSaveSelectedPriorities;
     private javax.swing.JButton jButtonSaveSuggestedSubjects;
     private javax.swing.JButton jButtonSaveSuggestionSTUD;
-    private javax.swing.JButton jButtonselect1stprio;
+    private javax.swing.JButton jButtonSelectFirstPrio;
+    private javax.swing.JButton jButtonSelectSecondPrio;
+    private javax.swing.JComboBox jComboBoxStudents;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -995,12 +1103,15 @@ public class GUI_Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabelSelectionStatus;
     private javax.swing.JLabel jLabelStatusHOP;
-    private javax.swing.JList jList3;
     private javax.swing.JList jList4;
     private javax.swing.JList jList5;
-    private javax.swing.JList jList6;
     private javax.swing.JList jListElectiveSubjectStudent;
+    private javax.swing.JList jListFirstPriorities;
+    private javax.swing.JList jListSecondPriorities;
     private javax.swing.JList jListSuggestedSubjects;
     private javax.swing.JList jListSuggestedSubjectsFinal;
     private javax.swing.JPanel jPanel1;

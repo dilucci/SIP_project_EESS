@@ -6,6 +6,7 @@
 package com.tryllestavene.sip_project_eess;
 
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 
 public class Controller {
 
@@ -163,6 +164,10 @@ public class Controller {
         int satisfaction = 0;
         System.out.println("PoolA: " + poolA);
         System.out.println("PoolB: " + poolB);
+        
+        if (!validVoteStudentList.isEmpty() && !poolA.isEmpty() && !poolB.isEmpty()) {
+            
+        
         for (Student student : validVoteStudentList) {
             ArrayList<ElectiveSubject> first = student.getFirstPriosList();
             ArrayList<ElectiveSubject> second = student.getSecondPriosList();
@@ -216,10 +221,11 @@ public class Controller {
             student.setSatisfaction(satisfaction);
             System.out.println(student.getFirstName() + " " + student.getSatisfaction());
         }
+        }
         return validVoteStudentList;
     }
 
-    public boolean acceptStudentVote(Student student) {
+    public boolean submitStudentVote(Student student) {
         if (student.getFirstPriosList().size() == 2 && student.getSecondPriosList().size() == 2) {
             validVoteStudentList.add(student);
             return true;
@@ -229,5 +235,9 @@ public class Controller {
 
     public ArrayList getValidVoteStudentList() {
         return validVoteStudentList;
+    }
+
+    public ArrayList<Student> getAllStudents() {
+        return studentList;
     }
 }

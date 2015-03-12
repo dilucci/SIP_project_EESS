@@ -115,7 +115,7 @@ public class ControllerTest {
         student1.addFirstPrioSubject(subject2);
         student1.addSecondPrioSubject(subject3);
         student1.addSecondPrioSubject(subject4);
-        assertThat(controller.acceptStudentVote(student1), is(true));
+        assertThat(controller.submitStudentVote(student1), is(true));
         assertThat(controller.getValidVoteStudentList().size(), is(1));
     }
 
@@ -124,47 +124,47 @@ public class ControllerTest {
         student1.addFirstPrioSubject(subject1);
         student1.addFirstPrioSubject(subject2);
         student1.addSecondPrioSubject(subject3);
-        assertThat(controller.acceptStudentVote(student1), is(false));
+        assertThat(controller.submitStudentVote(student1), is(false));
         assertThat(controller.getValidVoteStudentList().size(), is(0));
     }
 
     @Test
     public void calculateSatisfaction() throws Exception {
-        student1.addFirstPrioSubject(subject1); //happy 1.1 (+3) //Android
+        student1.addFirstPrioSubject(subject1); //very happy 1.1 (+3) //Android
         student1.addFirstPrioSubject(subject2); //C#
         student1.addSecondPrioSubject(subject3); //Arduino
         student1.addSecondPrioSubject(subject4); //Game
-        assertThat(controller.acceptStudentVote(student1), is(true));
+        assertThat(controller.submitStudentVote(student1), is(true));
 
-        student2.addFirstPrioSubject(subject4); //less happy 1.2 (+2)
+        student2.addFirstPrioSubject(subject4); //happy 1.2 (+2)
         student2.addFirstPrioSubject(subject2);
         student2.addSecondPrioSubject(subject3);
         student2.addSecondPrioSubject(subject1);
-        assertThat(controller.acceptStudentVote(student2), is(true));
+        assertThat(controller.submitStudentVote(student2), is(true));
 
-        student3.addFirstPrioSubject(subject7); //angry 0.0 (+1)
+        student3.addFirstPrioSubject(subject7); //satisfied 2.2 (+1)
         student3.addFirstPrioSubject(subject6);
         student3.addSecondPrioSubject(subject4);
         student3.addSecondPrioSubject(subject1);
-        assertThat(controller.acceptStudentVote(student3), is(true));
+        assertThat(controller.submitStudentVote(student3), is(true));
         
-        student4.addFirstPrioSubject(subject1); //angry 0.0 (-1)
+        student4.addFirstPrioSubject(subject1); //angry 1.0 (-1)
         student4.addFirstPrioSubject(subject6);
         student4.addSecondPrioSubject(subject8);
         student4.addSecondPrioSubject(subject5);
-        assertThat(controller.acceptStudentVote(student4), is(true));
+        assertThat(controller.submitStudentVote(student4), is(true));
         
-        student5.addFirstPrioSubject(subject7); //angry 0.0 (-2)
+        student5.addFirstPrioSubject(subject7); //more angry 2.0 (-2)
         student5.addFirstPrioSubject(subject6);
         student5.addSecondPrioSubject(subject1);
         student5.addSecondPrioSubject(subject5);
-        assertThat(controller.acceptStudentVote(student5), is(true));
+        assertThat(controller.submitStudentVote(student5), is(true));
         
-        student6.addFirstPrioSubject(subject7); //angry 0.0 (-3)
+        student6.addFirstPrioSubject(subject7); //most angry 0.0 (-3)
         student6.addFirstPrioSubject(subject6);
         student6.addSecondPrioSubject(subject8);
         student6.addSecondPrioSubject(subject5);
-        assertThat(controller.acceptStudentVote(student6), is(true));
+        assertThat(controller.submitStudentVote(student6), is(true));
 
         controller.insertIntoPool("a", subject1);
         controller.insertIntoPool("a", subject3);
