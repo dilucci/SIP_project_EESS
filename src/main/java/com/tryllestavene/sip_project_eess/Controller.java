@@ -107,6 +107,11 @@ public class Controller {
     public void setSubjectListFinal(ArrayList<ElectiveSubject> list) {
         subjectFinalList = list;
     }
+    
+    public void setPoolLists(ArrayList<ElectiveSubject> poolA, ArrayList<ElectiveSubject> poolB) {
+        poolAList = poolA;
+        poolBList = poolB;
+    }
 
     public boolean removeFromPool(String pool, ElectiveSubject subject) {
         //remove from poolA if string = a
@@ -160,7 +165,7 @@ public class Controller {
         return subjectFinalList;
     }
 
-    public ArrayList calculate(ArrayList<ElectiveSubject> poolA, ArrayList<ElectiveSubject> poolB) {
+    public ArrayList calculateSatisfaction(ArrayList<ElectiveSubject> poolA, ArrayList<ElectiveSubject> poolB) {
         int satisfaction = 0;
         System.out.println("PoolA: " + poolA);
         System.out.println("PoolB: " + poolB);

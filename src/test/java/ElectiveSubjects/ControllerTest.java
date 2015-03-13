@@ -170,7 +170,7 @@ public class ControllerTest {
         controller.insertIntoPool("a", subject3);
         controller.insertIntoPool("b", subject4);
         controller.insertIntoPool("b", subject2);
-        assertThat(controller.calculate(controller.getPoolA(), controller.getPoolB()).size(), is(6));
+        assertThat(controller.calculateSatisfaction(controller.getPoolA(), controller.getPoolB()).size(), is(6));
         assertThat(student1.getSatisfaction(), is(3));
         assertThat(student2.getSatisfaction(), is(2));
         assertThat(student3.getSatisfaction(), is(1));
