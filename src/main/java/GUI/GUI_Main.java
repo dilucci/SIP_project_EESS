@@ -6,8 +6,8 @@
 package GUI;
 
 import com.tryllestavene.sip_project_eess.Controller;
-import com.tryllestavene.sip_project_eess.ElectiveSubject;
-import com.tryllestavene.sip_project_eess.Student;
+import Entities.ElectiveSubject;
+import Entities.Student;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;

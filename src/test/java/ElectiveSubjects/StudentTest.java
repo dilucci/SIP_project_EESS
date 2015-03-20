@@ -5,8 +5,8 @@
  */
 package ElectiveSubjects;
 
-import com.tryllestavene.sip_project_eess.ElectiveSubject;
-import com.tryllestavene.sip_project_eess.Student;
+import Entities.ElectiveSubject;
+import Entities.Student;
 import static org.hamcrest.CoreMatchers.is;
 import org.junit.After;
 import org.junit.AfterClass;

@@ -5,6 +5,8 @@
  */
 package com.tryllestavene.sip_project_eess;
 
+import Entities.Student;
+import Entities.ElectiveSubject;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 

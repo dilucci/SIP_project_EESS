@@ -5,8 +5,7 @@
  */
 package ElectiveSubjects;
 
-import com.tryllestavene.sip_project_eess.ElectiveSubject;
-import com.tryllestavene.sip_project_eess.ElectiveSubjectInterface;
+import Entities.ElectiveSubject;
 import static org.hamcrest.CoreMatchers.is;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnitRuleMockery;

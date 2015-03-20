@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tryllestavene.sip_project_eess;
+package Entities;
 
+import Entities.ElectiveSubject;
 import java.util.ArrayList;
 
 /**
