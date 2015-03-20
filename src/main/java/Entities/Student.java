@@ -5,7 +5,6 @@
  */
 package Entities;
 
-import Entities.ElectiveSubject;
 import java.util.ArrayList;
 
 /**
@@ -16,8 +15,8 @@ public class Student {
 
     private String firstName;
     private String lastName;
-    private ArrayList<ElectiveSubject> firstPriosList;
-    private ArrayList<ElectiveSubject> secondPriosList;
+    private final ArrayList<ElectiveSubject> firstPriosList;
+    private final ArrayList<ElectiveSubject> secondPriosList;
     private int satisfaction;
 
     public int getSatisfaction() {

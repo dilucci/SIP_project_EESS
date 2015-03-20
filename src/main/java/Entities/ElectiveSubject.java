@@ -10,7 +10,6 @@ package Entities;
  * @author Seb
  */
 public class ElectiveSubject {
-    //private final ElectiveSubjectInterface subjectIF;
     private String title;
     private String description;
     private String proposedTeacher;
