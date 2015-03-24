@@ -23,11 +23,6 @@ public class ElectiveSubjectTest {
     }
     
     @Test
-    public void testSomething() throws Exception {
-        fail("Testen skal faile, godt gået");
-    }
-    
-    @Test
     public void testCreateElectiveSubject () throws Exception {
         //final ElectiveSubjectInterface subjectIF = context.mock(ElectiveSubjectInterface.class);
         ElectiveSubject subject = new ElectiveSubject("Android", "sygt det er sejt det android", "Peter");
