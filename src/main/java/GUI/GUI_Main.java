@@ -5,7 +5,7 @@
  */
 package GUI;
 
-import com.tryllestavene.sip_project_eess.Controller;
+import Contoller.Controller;
 import Entities.ElectiveSubject;
 import Entities.Student;
 import java.util.ArrayList;
