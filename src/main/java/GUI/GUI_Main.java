@@ -153,7 +153,6 @@ public class GUI_Main extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -242,19 +241,6 @@ public class GUI_Main extends javax.swing.JFrame {
         jLabelSatisfactionOK1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1115, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 479, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Teacher", jPanel4);
 
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -1086,13 +1072,13 @@ public class GUI_Main extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Head of program", jPanel3);
+        jTabbedPane1.addTab("Head of program (Teacher)", jPanel3);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -1121,21 +1107,142 @@ public class GUI_Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextFieldTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTeacherActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldTeacherActionPerformed
+    private void jButtonCalculateSatisfactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalculateSatisfactionActionPerformed
+        studentsTableModel = (DefaultTableModel) jTableStudentsHOP.getModel();
+        studentsTableModel.setRowCount(0);
 
-    private void jTextFieldTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTitleActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldTitleActionPerformed
+        ArrayList<ElectiveSubject> poolA = new ArrayList();
+        ArrayList<ElectiveSubject> poolB = new ArrayList();
+        ElectiveSubject subject;
+        for (int i = 0; i < poolASubjectsTableModel.getRowCount(); i++) {
+            subject = (ElectiveSubject) poolASubjectsTableModel.getValueAt(i, 0);
+            poolA.add(subject);
+        }
+        for (int i = 0; i < poolBSubjectsTableModel.getRowCount(); i++) {
+            subject = (ElectiveSubject) poolBSubjectsTableModel.getValueAt(i, 0);
+            poolB.add(subject);
+        }
 
-    private void jTextFieldTitleHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTitleHOPActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldTitleHOPActionPerformed
+        ctr.setPoolLists(poolA, poolB);
+        ArrayList<Student> students = new ArrayList();
+        students = ctr.calculateSatisfaction(poolA, poolB);
 
-    private void jTextFieldTeacherHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTeacherHOPActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldTeacherHOPActionPerformed
+        for (Student student : students) {
+            Object[] studentsArray = new Object[4];
+            studentsArray[0] = student.getFirstName() + " " + student.getLastName();
+            studentsArray[1] = student.getFirstPriosList();
+            studentsArray[2] = student.getSecondPriosList();
+            studentsArray[3] = student.getSatisfaction();
+            studentsTableModel.addRow(studentsArray);
+        }
+        jTableStudentsHOP.setModel(studentsTableModel);
+    }//GEN-LAST:event_jButtonCalculateSatisfactionActionPerformed
+
+    private void jButtonRemoveFromPoolBHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveFromPoolBHOPActionPerformed
+        if (jTablePoolB.getSelectedRow() > -1) {
+            int selectedRowIndex = jTablePoolB.getSelectedRow();
+            poolBSubjectsTableModel.removeRow(selectedRowIndex);
+        }
+    }//GEN-LAST:event_jButtonRemoveFromPoolBHOPActionPerformed
+
+    private void jButtonAddToPoolBHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddToPoolBHOPActionPerformed
+        //Virker men burde refaktureres til en metode i Controller.class så vi holder logikken deri.
+        boolean alreadyExists = false;
+        if (jTableSubjectsFinalHOP.getSelectedRow() > -1) {
+            int selectedRowIndex = jTableSubjectsFinalHOP.getSelectedRow();
+            if (subjectsFinalTableModel.getValueAt(selectedRowIndex, 0) instanceof ElectiveSubject) {
+                ElectiveSubject chosenSubject = (ElectiveSubject) subjectsFinalTableModel.getValueAt(selectedRowIndex, 0);
+                ElectiveSubject existingSubject;
+                for (int i = 0; i < poolASubjectsTableModel.getRowCount(); i++) {
+                    existingSubject = (ElectiveSubject) poolASubjectsTableModel.getValueAt(i, 0);
+                    if (chosenSubject == existingSubject) {
+                        alreadyExists = true;
+                    }
+                }
+                for (int i = 0; i < poolBSubjectsTableModel.getRowCount(); i++) {
+                    existingSubject = (ElectiveSubject) poolBSubjectsTableModel.getValueAt(i, 0);
+                    if (chosenSubject == existingSubject) {
+                        alreadyExists = true;
+                    }
+                }
+                if (!alreadyExists) {
+                    ElectiveSubject subject = (ElectiveSubject) subjectsFinalTableModel.getValueAt(selectedRowIndex, 0);
+                    Object[] subjects = new Object[3];
+                    subjects[0] = subject;
+                    subjects[1] = subject.getFirstPrioCounter();
+                    subjects[2] = subject.getSecondPrioCounter();
+                    poolBSubjectsTableModel.addRow(subjects);
+                    jTablePoolB.setModel(poolBSubjectsTableModel);
+                }
+            }
+        }
+    }//GEN-LAST:event_jButtonAddToPoolBHOPActionPerformed
+
+    private void jButtonRemoveFromPoolAHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveFromPoolAHOPActionPerformed
+        if (jTablePoolA.getSelectedRow() > -1) {
+            int selectedRowIndex = jTablePoolA.getSelectedRow();
+            poolASubjectsTableModel.removeRow(selectedRowIndex);
+        }
+    }//GEN-LAST:event_jButtonRemoveFromPoolAHOPActionPerformed
+
+    private void jButtonAddToPoolAHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddToPoolAHOPActionPerformed
+        //Virker men burde refaktureres til en metode i Controller.class så vi holder logikken deri.
+        boolean alreadyExists = false;
+        if (jTableSubjectsFinalHOP.getSelectedRow() > -1) {
+            int selectedRowIndex = jTableSubjectsFinalHOP.getSelectedRow();
+            if (subjectsFinalTableModel.getValueAt(selectedRowIndex, 0) instanceof ElectiveSubject) {
+                ElectiveSubject chosenSubject = (ElectiveSubject) subjectsFinalTableModel.getValueAt(selectedRowIndex, 0);
+                ElectiveSubject existingSubject;
+                for (int i = 0; i < poolASubjectsTableModel.getRowCount(); i++) {
+                    existingSubject = (ElectiveSubject) poolASubjectsTableModel.getValueAt(i, 0);
+                    if (chosenSubject == existingSubject) {
+                        alreadyExists = true;
+                    }
+                }
+                for (int i = 0; i < poolBSubjectsTableModel.getRowCount(); i++) {
+                    existingSubject = (ElectiveSubject) poolBSubjectsTableModel.getValueAt(i, 0);
+                    if (chosenSubject == existingSubject) {
+                        alreadyExists = true;
+                    }
+                }
+                if (!alreadyExists) {
+                    ElectiveSubject subject = (ElectiveSubject) subjectsFinalTableModel.getValueAt(selectedRowIndex, 0);
+                    Object[] subjects = new Object[3];
+                    subjects[0] = subject;
+                    subjects[1] = subject.getFirstPrioCounter();
+                    subjects[2] = subject.getSecondPrioCounter();
+                    poolASubjectsTableModel.addRow(subjects);
+                    jTablePoolA.setModel(poolASubjectsTableModel);
+                }
+            }
+        }
+    }//GEN-LAST:event_jButtonAddToPoolAHOPActionPerformed
+
+    private void jButtonSaveSuggestedSubjectsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveSuggestedSubjectsActionPerformed
+        ArrayList<ElectiveSubject> suggestedSubjectList = new ArrayList();
+        for (int i = 0; i < subjectListFinalModel.size(); i++) {
+            suggestedSubjectList.add((ElectiveSubject) subjectListFinalModel.getElementAt(i));
+        }
+        ctr.setSubjectListFinal(suggestedSubjectList);
+        refreshSubjectsFinalTableHOP();
+        jListElectiveSubjectStudent.setModel(subjectListFinalModel);
+    }//GEN-LAST:event_jButtonSaveSuggestedSubjectsActionPerformed
+
+    private void jButtonRemoveSubjectsHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveSubjectsHOPActionPerformed
+        if (jListSuggestedSubjectsFinal.getSelectedValue() != null) {
+            ElectiveSubject subject = (ElectiveSubject) jListSuggestedSubjectsFinal.getSelectedValue();
+            subjectListModel.addElement(subject);
+            subjectListFinalModel.removeElement(subject);
+        }
+    }//GEN-LAST:event_jButtonRemoveSubjectsHOPActionPerformed
+
+    private void jButtonAddSubjectsHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddSubjectsHOPActionPerformed
+        if (jListSuggestedSubjects.getSelectedValue() != null) {
+            ElectiveSubject subject = (ElectiveSubject) jListSuggestedSubjects.getSelectedValue();
+            subjectListFinalModel.addElement(subject);
+            subjectListModel.removeElement(subject);
+        }
+    }//GEN-LAST:event_jButtonAddSubjectsHOPActionPerformed
 
     private void jButtonSaveNewSuggestionHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveNewSuggestionHOPActionPerformed
         String title;
@@ -1155,32 +1262,13 @@ public class GUI_Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonSaveNewSuggestionHOPActionPerformed
 
-    private void jButtonAddSubjectsHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddSubjectsHOPActionPerformed
-        if (jListSuggestedSubjects.getSelectedValue() != null) {
-            ElectiveSubject subject = (ElectiveSubject) jListSuggestedSubjects.getSelectedValue();
-            subjectListFinalModel.addElement(subject);
-            subjectListModel.removeElement(subject);
-        }
+    private void jTextFieldTitleHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTitleHOPActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldTitleHOPActionPerformed
 
-    }//GEN-LAST:event_jButtonAddSubjectsHOPActionPerformed
-
-    private void jButtonRemoveSubjectsHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveSubjectsHOPActionPerformed
-        if (jListSuggestedSubjectsFinal.getSelectedValue() != null) {
-            ElectiveSubject subject = (ElectiveSubject) jListSuggestedSubjectsFinal.getSelectedValue();
-            subjectListModel.addElement(subject);
-            subjectListFinalModel.removeElement(subject);
-        }
-    }//GEN-LAST:event_jButtonRemoveSubjectsHOPActionPerformed
-
-    private void jButtonSaveSuggestedSubjectsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveSuggestedSubjectsActionPerformed
-        ArrayList<ElectiveSubject> suggestedSubjectList = new ArrayList();
-        for (int i = 0; i < subjectListFinalModel.size(); i++) {
-            suggestedSubjectList.add((ElectiveSubject) subjectListFinalModel.getElementAt(i));
-        }
-        ctr.setSubjectListFinal(suggestedSubjectList);
-        refreshSubjectsFinalTableHOP();
-        jListElectiveSubjectStudent.setModel(subjectListFinalModel);
-    }//GEN-LAST:event_jButtonSaveSuggestedSubjectsActionPerformed
+    private void jTextFieldTeacherHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTeacherHOPActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldTeacherHOPActionPerformed
 
     private void jButtonDeSelectSecondPrioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeSelectSecondPrioActionPerformed
         if (jListSecondPriorities.getSelectedValue() != null) {
@@ -1259,116 +1347,13 @@ public class GUI_Main extends javax.swing.JFrame {
         refreshListsStudent();
     }//GEN-LAST:event_jComboBoxStudentsActionPerformed
 
-    private void jButtonAddToPoolAHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddToPoolAHOPActionPerformed
-        //Virker men burde refaktureres til en metode i Controller.class så vi holder logikken deri.
-        boolean alreadyExists = false;
-        if (jTableSubjectsFinalHOP.getSelectedRow() > -1) {
-            int selectedRowIndex = jTableSubjectsFinalHOP.getSelectedRow();
-            if (subjectsFinalTableModel.getValueAt(selectedRowIndex, 0) instanceof ElectiveSubject) {
-                ElectiveSubject chosenSubject = (ElectiveSubject) subjectsFinalTableModel.getValueAt(selectedRowIndex, 0);
-                ElectiveSubject existingSubject;
-                for (int i = 0; i < poolASubjectsTableModel.getRowCount(); i++) {
-                    existingSubject = (ElectiveSubject) poolASubjectsTableModel.getValueAt(i, 0);
-                    if (chosenSubject == existingSubject) {
-                        alreadyExists = true;
-                    }
-                }
-                for (int i = 0; i < poolBSubjectsTableModel.getRowCount(); i++) {
-                    existingSubject = (ElectiveSubject) poolBSubjectsTableModel.getValueAt(i, 0);
-                    if (chosenSubject == existingSubject) {
-                        alreadyExists = true;
-                    }
-                }
-                if (!alreadyExists) {
-                    ElectiveSubject subject = (ElectiveSubject) subjectsFinalTableModel.getValueAt(selectedRowIndex, 0);
-                    Object[] subjects = new Object[3];
-                    subjects[0] = subject;
-                    subjects[1] = subject.getFirstPrioCounter();
-                    subjects[2] = subject.getSecondPrioCounter();
-                    poolASubjectsTableModel.addRow(subjects);
-                    jTablePoolA.setModel(poolASubjectsTableModel);
-                }
-            }
-        }
-    }//GEN-LAST:event_jButtonAddToPoolAHOPActionPerformed
+    private void jTextFieldTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTitleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldTitleActionPerformed
 
-    private void jButtonRemoveFromPoolAHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveFromPoolAHOPActionPerformed
-        if (jTablePoolA.getSelectedRow() > -1) {
-            int selectedRowIndex = jTablePoolA.getSelectedRow();
-            poolASubjectsTableModel.removeRow(selectedRowIndex);
-        }
-    }//GEN-LAST:event_jButtonRemoveFromPoolAHOPActionPerformed
-
-    private void jButtonAddToPoolBHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddToPoolBHOPActionPerformed
-        //Virker men burde refaktureres til en metode i Controller.class så vi holder logikken deri.
-        boolean alreadyExists = false;
-        if (jTableSubjectsFinalHOP.getSelectedRow() > -1) {
-            int selectedRowIndex = jTableSubjectsFinalHOP.getSelectedRow();
-            if (subjectsFinalTableModel.getValueAt(selectedRowIndex, 0) instanceof ElectiveSubject) {
-                ElectiveSubject chosenSubject = (ElectiveSubject) subjectsFinalTableModel.getValueAt(selectedRowIndex, 0);
-                ElectiveSubject existingSubject;
-                for (int i = 0; i < poolASubjectsTableModel.getRowCount(); i++) {
-                    existingSubject = (ElectiveSubject) poolASubjectsTableModel.getValueAt(i, 0);
-                    if (chosenSubject == existingSubject) {
-                        alreadyExists = true;
-                    }
-                }
-                for (int i = 0; i < poolBSubjectsTableModel.getRowCount(); i++) {
-                    existingSubject = (ElectiveSubject) poolBSubjectsTableModel.getValueAt(i, 0);
-                    if (chosenSubject == existingSubject) {
-                        alreadyExists = true;
-                    }
-                }
-                if (!alreadyExists) {
-                    ElectiveSubject subject = (ElectiveSubject) subjectsFinalTableModel.getValueAt(selectedRowIndex, 0);
-                    Object[] subjects = new Object[3];
-                    subjects[0] = subject;
-                    subjects[1] = subject.getFirstPrioCounter();
-                    subjects[2] = subject.getSecondPrioCounter();
-                    poolBSubjectsTableModel.addRow(subjects);
-                    jTablePoolB.setModel(poolBSubjectsTableModel);
-                }
-            }
-        }
-    }//GEN-LAST:event_jButtonAddToPoolBHOPActionPerformed
-
-    private void jButtonRemoveFromPoolBHOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveFromPoolBHOPActionPerformed
-        if (jTablePoolB.getSelectedRow() > -1) {
-            int selectedRowIndex = jTablePoolB.getSelectedRow();
-            poolBSubjectsTableModel.removeRow(selectedRowIndex);
-        }
-    }//GEN-LAST:event_jButtonRemoveFromPoolBHOPActionPerformed
-
-    private void jButtonCalculateSatisfactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalculateSatisfactionActionPerformed
-        studentsTableModel = (DefaultTableModel) jTableStudentsHOP.getModel();
-        studentsTableModel.setRowCount(0);
-        
-        ArrayList<ElectiveSubject> poolA = new ArrayList();
-        ArrayList<ElectiveSubject> poolB = new ArrayList();
-        ElectiveSubject subject;
-        for (int i = 0; i < poolASubjectsTableModel.getRowCount(); i++) {
-                    subject = (ElectiveSubject) poolASubjectsTableModel.getValueAt(i, 0);
-                    poolA.add(subject);
-        }
-        for (int i = 0; i < poolBSubjectsTableModel.getRowCount(); i++) {
-                    subject = (ElectiveSubject) poolBSubjectsTableModel.getValueAt(i, 0);
-                    poolB.add(subject);
-        }
-        
-        ctr.setPoolLists(poolA, poolB);
-        ArrayList<Student> students = new ArrayList();
-        students = ctr.calculateSatisfaction(poolA, poolB);
-        
-        for (Student student : students) {
-            Object[] studentsArray = new Object[4];
-            studentsArray[0] = student.getFirstName() + " " + student.getLastName();
-            studentsArray[1] = student.getFirstPriosList();
-            studentsArray[2] = student.getSecondPriosList();
-            studentsArray[3] = student.getSatisfaction();
-            studentsTableModel.addRow(studentsArray);
-        }
-        jTableStudentsHOP.setModel(studentsTableModel);
-    }//GEN-LAST:event_jButtonCalculateSatisfactionActionPerformed
+    private void jTextFieldTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTeacherActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldTeacherActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1467,7 +1452,6 @@ public class GUI_Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
